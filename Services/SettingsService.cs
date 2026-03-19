@@ -12,7 +12,7 @@ public class SettingsService
     public SettingsService()
     {
         var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        var appFolder = Path.Combine(appDataPath, "CrossHairPlus");
+        var appFolder = Path.Combine(appDataPath, "AimSight");
 
         if (!Directory.Exists(appFolder))
         {
