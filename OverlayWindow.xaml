@@ -4,12 +4,14 @@
         Title="CrossHair Overlay"
         WindowStyle="None"
         AllowsTransparency="True"
-        Background="Transparent"
+        Background="#88000000"
         Topmost="True"
         ShowInTaskbar="False"
         ResizeMode="NoResize"
         Visibility="Visible">
     <Grid x:Name="CrosshairGrid">
+        <!-- Test crosshair in XAML -->
+        <Path Stroke="Red" StrokeThickness="2" Data="M 95,100 L 105,100 M 100,95 L 100,105"/>
         <Rectangle x:Name="CrosshairRect" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
     </Grid>
 </Window>

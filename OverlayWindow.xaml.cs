@@ -20,6 +20,12 @@ public partial class OverlayWindow : Window
         _settingsService = new SettingsService();
         _settings = _settingsService.Load();
 
+        // Force show and reset position on startup
+        _settings.IsVisible = true;
+        _settings.OffsetX = 0;
+        _settings.OffsetY = 0;
+        _settingsService.Save(_settings);
+
         Loaded += OnLoaded;
         Closing += OnClosing;
     }
@@ -99,52 +105,115 @@ public partial class OverlayWindow : Window
         var dpiScaleX = presentationSource?.CompositionTarget?.TransformToDevice.M11 ?? 1.0;
         var dpiScaleY = presentationSource?.CompositionTarget?.TransformToDevice.M22 ?? 1.0;
 
-        // Use a fixed large window size to contain all crosshair sizes
-        // Max size is 100, so use 200 to have room
+        // Calculate center of the screen in device pixels
+        var centerX = screen.Bounds.Left + (screen.Bounds.Width / 2);
+        var centerY = screen.Bounds.Top + (screen.Bounds.Height / 2);
+
+        // Apply user offset
+        centerX += (int)_settings.OffsetX;
+        centerY += (int)_settings.OffsetY;
+
+        // Window size
         const double fixedWindowSize = 200;
-        var windowSizeDevice = fixedWindowSize * dpiScaleX;
 
-        // Calculate the target center position
-        var targetCenterX = screen.Bounds.Left + (screen.Bounds.Width / 2) + (_settings.OffsetX * dpiScaleX);
-        var targetCenterY = screen.Bounds.Top + (screen.Bounds.Height / 2) + (_settings.OffsetY * dpiScaleY);
+        // Position window centered at target
+        // Use device pixels directly for positioning
+        var newLeft = centerX - (fixedWindowSize * dpiScaleX / 2);
+        var newTop = centerY - (fixedWindowSize * dpiScaleY / 2);
 
-        // Position the fixed-size window centered at target
-        var newLeft = targetCenterX - (windowSizeDevice / 2);
-        var newTop = targetCenterY - (windowSizeDevice / 2);
-
-        // Convert from device pixels back to WPF logical coordinates
+        // Convert back to WPF coordinates
         Left = newLeft / dpiScaleX;
         Top = newTop / dpiScaleY;
 
-        // Set fixed window size
         Width = fixedWindowSize;
         Height = fixedWindowSize;
     }
 
     private void RenderCrosshair()
     {
-        var renderer = new CrosshairRenderer(_settings);
-        renderer.Render();
+        // Clear existing children
+        CrosshairGrid.Children.Clear();
 
-        var visualBrush = new VisualBrush(renderer)
+        var color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(_settings.Color);
+        var brush = new SolidColorBrush(color);
+
+        // User's size is from 10-100, scale to 200 window
+        var size = _settings.Size * 2;  // 40 -> 80 in 200 window
+        var halfSize = size / 2;
+        var halfThickness = _settings.Thickness;
+        var gap = halfThickness;
+
+        switch (_settings.Type)
         {
-            Stretch = Stretch.None,
-            Viewbox = new Rect(0, 0, _settings.Size, _settings.Size),
-            ViewboxUnits = BrushMappingMode.Absolute
+            case CrosshairType.Dot:
+                var dot = new System.Windows.Shapes.Ellipse
+                {
+                    Width = halfThickness * 2,
+                    Height = halfThickness * 2,
+                    Fill = brush,
+                    HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+                CrosshairGrid.Children.Add(dot);
+                break;
+
+            case CrosshairType.Cross:
+                // Top line
+                AddLine(CrosshairGrid, 100, 0, 100, 100 - gap, brush, halfThickness);
+                // Bottom line
+                AddLine(CrosshairGrid, 100, 100 + gap, 100, 200, brush, halfThickness);
+                // Left line
+                AddLine(CrosshairGrid, 0, 100, 100 - gap, 100, brush, halfThickness);
+                // Right line
+                AddLine(CrosshairGrid, 100 + gap, 100, 200, 100, brush, halfThickness);
+                break;
+
+            case CrosshairType.Circle:
+                var circle = new System.Windows.Shapes.Ellipse
+                {
+                    Width = size,
+                    Height = size,
+                    Stroke = brush,
+                    StrokeThickness = halfThickness,
+                    HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+                CrosshairGrid.Children.Add(circle);
+                break;
+
+            case CrosshairType.CrossCircle:
+                var crossCircle = new System.Windows.Shapes.Ellipse
+                {
+                    Width = size,
+                    Height = size,
+                    Stroke = brush,
+                    StrokeThickness = halfThickness,
+                    HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+                CrosshairGrid.Children.Add(crossCircle);
+                // Cross lines
+                AddLine(CrosshairGrid, 100, 0, 100, 100 - gap, brush, halfThickness);
+                AddLine(CrosshairGrid, 100, 100 + gap, 100, 200, brush, halfThickness);
+                AddLine(CrosshairGrid, 0, 100, 100 - gap, 100, brush, halfThickness);
+                AddLine(CrosshairGrid, 100 + gap, 100, 200, 100, brush, halfThickness);
+                break;
+        }
+    }
+
+    private void AddLine(System.Windows.Controls.Grid parent, double x1, double y1, double x2, double y2, System.Windows.Media.Brush brush, double thickness)
+    {
+        var line = new System.Windows.Shapes.Line
+        {
+            X1 = x1,
+            Y1 = y1,
+            X2 = x2,
+            Y2 = y2,
+            Stroke = brush,
+            StrokeThickness = thickness,
+            SnapsToDevicePixels = true
         };
-
-        // Use fixed size rectangle (same as window size)
-        const double fixedSize = 200;
-
-        // Calculate scale factor
-        var scale = _settings.Size / fixedSize;
-
-        // Apply scale transform to center the crosshair
-        CrosshairRect.Width = fixedSize;
-        CrosshairRect.Height = fixedSize;
-        CrosshairRect.Fill = visualBrush;
-        CrosshairRect.RenderTransform = new System.Windows.Media.ScaleTransform(scale, scale);
-        CrosshairRect.RenderTransformOrigin = new System.Windows.Point(0.5, 0.5);
+        parent.Children.Add(line);
     }
 
     public CrosshairSettings GetSettings() => _settings;
