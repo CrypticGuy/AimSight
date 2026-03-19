@@ -1,0 +1,107 @@
+<Window x:Class="CrossHairPlus.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="CrossHair Plus - Settings"
+        Height="600"
+        Width="380"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="#1e1e1e">
+    <Window.Resources>
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="#ffffff"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Background" Value="#333333"/>
+            <Setter Property="Foreground" Value="#ffffff"/>
+            <Setter Property="BorderBrush" Value="#555555"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Foreground" Value="#ffffff"/>
+            <Setter Property="Background" Value="#333333"/>
+        </Style>
+        <Style TargetType="Slider">
+            <Setter Property="Foreground" Value="#0078d4"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#444444"/>
+            <Setter Property="Foreground" Value="#ffffff"/>
+            <Setter Property="BorderBrush" Value="#666666"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="5,2"/>
+        </Style>
+    </Window.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Crosshair Type -->
+            <Label Grid.Row="0" Content="Crosshair Type" Margin="0,0,0,5"/>
+            <ComboBox x:Name="CrosshairTypeCombo" Grid.Row="1" Margin="0,0,0,15" SelectionChanged="OnSettingChanged">
+                <ComboBoxItem Content="Dot"/>
+                <ComboBoxItem Content="Cross"/>
+                <ComboBoxItem Content="Circle"/>
+                <ComboBoxItem Content="Cross + Circle"/>
+            </ComboBox>
+
+            <!-- Monitor Selection -->
+            <Label Grid.Row="2" Content="Monitor" Margin="0,0,0,5"/>
+            <ComboBox x:Name="MonitorCombo" Grid.Row="3" Margin="0,0,0,15" SelectionChanged="OnMonitorChanged"/>
+
+            <!-- Color Selection -->
+            <Label Grid.Row="4" Content="Color" Margin="0,0,0,5"/>
+            <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="0,0,0,15">
+                <Button x:Name="BtnRed" Width="35" Height="35" Margin="0,0,8,0" Click="OnColorClick" Tag="#FF0000" Background="#FF0000" BorderBrush="#666666" BorderThickness="2"/>
+                <Button x:Name="BtnGreen" Width="35" Height="35" Margin="0,0,8,0" Click="OnColorClick" Tag="#00FF00" Background="#00FF00" BorderBrush="#666666" BorderThickness="2"/>
+                <Button x:Name="BtnBlue" Width="35" Height="35" Margin="0,0,8,0" Click="OnColorClick" Tag="#0080FF" Background="#0080FF" BorderBrush="#666666" BorderThickness="2"/>
+                <Button x:Name="BtnWhite" Width="35" Height="35" Margin="0,0,8,0" Click="OnColorClick" Tag="#FFFFFF" Background="#FFFFFF" BorderBrush="#666666" BorderThickness="2"/>
+                <Button x:Name="BtnBlack" Width="35" Height="35" Margin="0,0,8,0" Click="OnColorClick" Tag="#000000" Background="#000000" BorderBrush="#666666" BorderThickness="2"/>
+                <Button x:Name="BtnYellow" Width="35" Height="35" Click="OnColorClick" Tag="#FFFF00" Background="#FFFF00" BorderBrush="#666666" BorderThickness="2"/>
+            </StackPanel>
+
+            <!-- Size -->
+            <Label Grid.Row="6" x:Name="SizeLabel" Content="Size: 40" Margin="0,0,0,5"/>
+            <Slider x:Name="SizeSlider" Grid.Row="6" Minimum="10" Maximum="100" Value="40" Margin="0,20,0,10" ValueChanged="OnSettingChanged"/>
+
+            <!-- Thickness -->
+            <Label Grid.Row="6" x:Name="ThicknessLabel" Content="Thickness: 2" Margin="0,50,0,5"/>
+            <Slider x:Name="ThicknessSlider" Grid.Row="6" Minimum="1" Maximum="10" Value="2" Margin="0,70,0,10" ValueChanged="OnSettingChanged"/>
+
+            <!-- Offset X -->
+            <Label Grid.Row="7" x:Name="OffsetXLabel" Content="Offset X: 0" Margin="0,0,0,5"/>
+            <Slider x:Name="OffsetXSlider" Grid.Row="7" Minimum="-500" Maximum="500" Value="0" Margin="0,20,0,10" ValueChanged="OnSettingChanged"/>
+
+            <!-- Offset Y -->
+            <Label Grid.Row="7" x:Name="OffsetYLabel" Content="Offset Y: 0" Margin="0,50,0,5"/>
+            <Slider x:Name="OffsetYSlider" Grid.Row="7" Minimum="-500" Maximum="500" Value="0" Margin="0,70,0,10" ValueChanged="OnSettingChanged"/>
+
+            <!-- Preview -->
+            <Border Grid.Row="8" BorderBrush="#555555" BorderThickness="1" Margin="0,10,0,0" HorizontalAlignment="Center" Width="80" Height="80" Background="#2a2a2a">
+                <Canvas x:Name="PreviewCanvas" Width="80" Height="80"/>
+            </Border>
+
+            <!-- Buttons -->
+            <StackPanel Grid.Row="9" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
+                <Button Content="Apply" Width="60" Height="30" Margin="0,0,10,0" Click="OnApply"/>
+                <Button Content="Show/Hide" Width="80" Height="30" Margin="0,0,10,0" Click="OnToggleOverlay"/>
+                <Button Content="Reset" Width="60" Height="30" Margin="0,0,10,0" Click="OnResetOffset"/>
+                <Button Content="Close" Width="60" Height="30" Click="OnClose"/>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</Window>
