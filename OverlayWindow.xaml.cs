@@ -146,10 +146,12 @@ public partial class OverlayWindow : Window
         switch (_settings.Type)
         {
             case CrosshairType.Dot:
+                // Dot size should scale with user setting (thickness * scale factor)
+                var dotSize = Math.Max(halfThickness * 2, _settings.Size / 5);
                 var dot = new System.Windows.Shapes.Ellipse
                 {
-                    Width = halfThickness * 2,
-                    Height = halfThickness * 2,
+                    Width = dotSize,
+                    Height = dotSize,
                     Fill = brush,
                     HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center
@@ -158,14 +160,13 @@ public partial class OverlayWindow : Window
                 break;
 
             case CrosshairType.Cross:
-                // Top line
-                AddLine(CrosshairGrid, 100, 0, 100, 100 - gap, brush, halfThickness);
-                // Bottom line
-                AddLine(CrosshairGrid, 100, 100 + gap, 100, 200, brush, halfThickness);
-                // Left line
-                AddLine(CrosshairGrid, 0, 100, 100 - gap, 100, brush, halfThickness);
-                // Right line
-                AddLine(CrosshairGrid, 100 + gap, 100, 200, 100, brush, halfThickness);
+                // Lines from edges to center gap, scaled by user size
+                // Center is at 100, size determines how far from center lines go
+                var crossExtent = halfSize;  // How far from center to edge
+                AddLine(CrosshairGrid, 100, 100 - crossExtent, 100, 100 - gap, brush, halfThickness);
+                AddLine(CrosshairGrid, 100, 100 + gap, 100, 100 + crossExtent, brush, halfThickness);
+                AddLine(CrosshairGrid, 100 - crossExtent, 100, 100 - gap, 100, brush, halfThickness);
+                AddLine(CrosshairGrid, 100 + gap, 100, 100 + crossExtent, 100, brush, halfThickness);
                 break;
 
             case CrosshairType.Circle:
@@ -192,11 +193,12 @@ public partial class OverlayWindow : Window
                     VerticalAlignment = VerticalAlignment.Center
                 };
                 CrosshairGrid.Children.Add(crossCircle);
-                // Cross lines
-                AddLine(CrosshairGrid, 100, 0, 100, 100 - gap, brush, halfThickness);
-                AddLine(CrosshairGrid, 100, 100 + gap, 100, 200, brush, halfThickness);
-                AddLine(CrosshairGrid, 0, 100, 100 - gap, 100, brush, halfThickness);
-                AddLine(CrosshairGrid, 100 + gap, 100, 200, 100, brush, halfThickness);
+                // Cross lines - extend to circle edge (radius minus thickness)
+                crossExtent = halfSize - halfThickness;
+                AddLine(CrosshairGrid, 100, 100 - crossExtent, 100, 100 - gap, brush, halfThickness);
+                AddLine(CrosshairGrid, 100, 100 + gap, 100, 100 + crossExtent, brush, halfThickness);
+                AddLine(CrosshairGrid, 100 - crossExtent, 100, 100 - gap, 100, brush, halfThickness);
+                AddLine(CrosshairGrid, 100 + gap, 100, 100 + crossExtent, 100, brush, halfThickness);
                 break;
         }
     }
