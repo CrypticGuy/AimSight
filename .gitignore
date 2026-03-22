@@ -6,10 +6,14 @@ obj/
 *.pdb
 *.cache
 *.log
+*.winmd
+*.tlb
 
 # NuGet
 packages/
 *.nupkg
+project.lock.json
+project.fragment.lock.json
 
 # Build results
 [Dd]ebug/
@@ -19,8 +23,6 @@ x86/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
-[Bb]in/
-[Oo]bj/
 [Ll]og/
 [Ll]ogs/
 
@@ -31,6 +33,11 @@ bld/
 *.userosscache
 *.sln.docstates
 *.rsuser
+*.ncb
+*.ilk
+*.opensdf
+*.sdf
+*.cachefile
 
 # Rider
 .idea/
@@ -42,17 +49,25 @@ bld/
 # User-specific files
 *.suo
 *.user
-*.userosscache
-*.sln.docstates
+*.rsuser
 
-# Build results
-[Dd]ebugPublic/
-[Rr]elease/
-x64/
-x86/
-[Ww][Ii][Nn]32/
-[Aa][Rr][Mm]/
-[Aa][Rr][Mm]64/
-bld/
-[Bb]in/
-[Oo]bj/
+# Publish output
+publish/
+publish-aot/
+publish-framework-dependent/
+publish-self-contained/
+
+# AOT
+*.runtimesetruntimepack/
+
+# OS generated
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+
+# Global ignores
+*.log
+*.tmp
