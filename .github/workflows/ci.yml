@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  DOTNET_VERSION: '9.0.x'
+  DOTNET_VERSION: '8.0.x'
 
 jobs:
   build:
@@ -32,7 +32,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-output
-          path: |
-            CrossHairPlus/bin/Release/net9.0-windows/win-x64/**
-            OverlayHook/bin/Release/**/OverlayHook.dll
+          path: CrossHairPlus/bin/Release/net8.0-windows/win-x64/**
           retention-days: 7

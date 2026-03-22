@@ -12,7 +12,7 @@ on:
       - 'v*'
 
 env:
-  DOTNET_VERSION: '9.0.x'
+  DOTNET_VERSION: '8.0.x'
 
 jobs:
   build:
@@ -38,13 +38,6 @@ jobs:
           fi
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
           echo "TAG=v$VERSION" >> $GITHUB_OUTPUT
-
-      - name: Build OverlayHook
-        run: |
-          MSBuild ${{ github.workspace }}/OverlayHook/OverlayHook.csproj `
-            -p:Configuration=Release `
-            -p:Platform=x64 `
-            -v:m
 
       - name: Publish
         run: |
