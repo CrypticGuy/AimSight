@@ -23,10 +23,10 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Restore dependencies
-        run: dotnet restore ${{ github.workspace }}/CrossHairPlus.sln
+        run: dotnet restore ${{ github.workspace }}/CrossHairPlus.sln -r win-x64
 
       - name: Build
-        run: dotnet build ${{ github.workspace }}/CrossHairPlus.sln -c Release --no-restore
+        run: dotnet build ${{ github.workspace }}/CrossHairPlus.sln -c Release -r win-x64 --no-restore
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
