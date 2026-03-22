@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__MiniMax__web_search",
+      "Bash(dotnet:*)",
+      "Bash(\"C:\\\\Users\\\\binar\\\\source\\\\repos\\\\CrossHairPlus\\\\CrossHairPlus\\\\bin\\\\Release\\\\net9.0-windows\\\\win-x64\\\\publish\\\\CrossHairPlus.exe\":*)",
+      "mcp__MiniMax__understand_image",
+      "Bash(ls:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(rm:*)",
+      "Bash(taskkill /F /IM AimSight.exe)",
+      "Bash(git -C CrossHairPlus status)",
+      "Bash(git config:*)",
+      "Bash(powershell -ExecutionPolicy Bypass -File Generate-Icon.ps1)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:stackoverflow.com)",
+      "WebFetch(domain:niemand.com.ar)",
+      "WebFetch(domain:fredemmott.com)",
+      "WebFetch(domain:dev.overwolf.com)",
+      "Bash(dir OverlayHook\\\\bin\\\\Release\\\\net48\\\\*.dll)",
+      "Bash(dir CrossHairPlus\\\\bin\\\\Release\\\\net9.0-windows\\\\win-x64\\\\*.dll)",
+      "Bash(dumpbin /headers OverlayHook/bin/Release/net48/OverlayHook.dll)",
+      "Bash(./AimSight.exe)",
+      "Bash(tasklist)",
+      "Bash(taskkill //F //IM AimSight.exe)",
+      "Bash(start //B ./AimSight.exe)",
+      "WebFetch(domain:easyhook.github.io)",
+      "WebFetch(domain:www.nuget.org)",
+      "Bash(taskkill /F /PID 41824)",
+      "Bash(cd:*)"
+    ]
+  }
+}

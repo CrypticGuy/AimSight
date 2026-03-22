@@ -66,6 +66,26 @@ CrossHairPlus/bin/Release/net9.0-windows/AimSight.exe
 4. Click "Inject" to attach the overlay
 5. Press Insert (or your configured hotkey) to toggle the overlay
 
+> **Important:** For best results, run your game in **borderless windowed** or **windowed** mode. Running in fullscreen exclusive mode may cause the overlay to not display properly or appear behind the game window.
+
+## Recent Updates
+
+- **Improved rendering and visibility**: Fixed issues where the crosshair would not display correctly or would become hidden behind the game window
+- **Size scaling fixes**: Corrected crosshair size scaling across different crosshair types
+- **App renaming**: Application rebranded to AimSight with updated icon and branding
+- **Initial release**: Complete crosshair overlay application with DirectX 11 injection support
+
+## Future Development
+
+ Planned improvements for upcoming releases:
+
+- **Enhanced injection reliability**: Improvements to process injection stability across a wider range of games
+- **Broader game compatibility**: Extended support for additional DirectX 11 titles
+- **Custom crosshair profiles**: Save and load multiple crosshair configurations
+- **Game-specific settings**: Per-game crosshair preferences that auto-detect running games
+
+## Architecture
+
 ## Architecture
 
 The application consists of two components:
