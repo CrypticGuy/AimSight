@@ -39,6 +39,12 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
           echo "TAG=v$VERSION" >> $GITHUB_OUTPUT
 
+      - name: Copy documentation
+        run: |
+          mkdir -p ${{ github.workspace }}/dist
+          cp ${{ github.workspace }}/README.md ${{ github.workspace }}/dist/
+          cp ${{ github.workspace }}/LICENSE ${{ github.workspace }}/dist/
+
       - name: Publish
         run: |
           dotnet publish ${{ github.workspace }}/CrossHairPlus/CrossHairPlus.csproj `
@@ -51,19 +57,12 @@ jobs:
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
         with:
           draft: true
-          prerelease: ${{ contains(steps.version.outputs.VERSION, 'alpha') || contains(steps.version.outputs.VERSION, 'beta') }}
+          prerelease: ${{ contains(steps.version.outputs.VERSION, 'alpha') || contains(steps.version.outputs.VERSION, 'beta') || contains(steps.version.outputs.VERSION, 'rc') }}
           files: |
             dist/AimSight.exe
-            dist/*.md
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload Release Asset
-        if: startsWith(github.ref, 'refs/tags/')
-        run: |
-          gh release upload ${{ steps.version.outputs.TAG }} dist/AimSight.exe --clobber
+            dist/README.md
+            dist/LICENSE
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
